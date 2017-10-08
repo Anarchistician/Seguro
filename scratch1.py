@@ -69,9 +69,14 @@ for i in ind:
         plt.hist(seguro.iloc[:,i].dropna())
         plt.title(seguroNames[i])
 
+indCorr = seguro.iloc[:,ind].dropna().corr()
+mask = np.zeros_like(indCorr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
 #   This has binaries in it that should be removed.
 #   I can do a pairwise ChiSq analysis on those later.
-sb.heatmap(seguro.iloc[:,ind].dropna().corr(),
+sb.heatmap(indCorr,
+           mask = mask,
            vmin = -1,
            vmax = 1,
            cmap = "RdBu")
