@@ -61,22 +61,140 @@ reg = [i for i,s in enumerate(seguroNames) if '_reg_' in s]
 car = [i for i,s in enumerate(seguroNames) if '_car_' in s]
 calc = [i for i,s in enumerate(seguroNames) if '_calc_' in s]
 
-for i in ind:
-    if "_bin" in seguroNames[i]:
-        pass
-    else:
-        plt.figure(i)
-        plt.hist(seguro.iloc[:,i].dropna())
-        plt.title(seguroNames[i])
+"""
 
-indCorr = seguro.iloc[:,ind].dropna().corr()
+            Ind
+
+"""
+
+indNoBins = [i for i in ind if '_bin' not in seguroNames[i]]
+
+for i in indNoBins:
+    plt.figure(i)
+    plt.hist(seguro.iloc[:,i].dropna())
+    plt.title(seguroNames[i])
+
+
+indCorr = seguro.iloc[:,indNoBins].dropna().corr()
 mask = np.zeros_like(indCorr, dtype=np.bool)
 mask[np.triu_indices_from(mask)] = True
 
-#   This has binaries in it that should be removed.
+#   Removed bins
 #   I can do a pairwise ChiSq analysis on those later.
-sb.heatmap(indCorr,
+sb.heatmap(round(indCorr,2),
+           mask = mask,
+           annot = True,
+           vmin = -1,
+           vmax = 1,
+           cmap = "RdBu")
+#Nothing significant.
+
+"""
+
+            Reg
+
+"""
+
+regNoBins = [i for i in reg if '_bin' not in seguroNames[i]]
+
+for i in regNoBins:
+    plt.figure(i)
+    plt.hist(seguro.iloc[:,i].dropna())
+    plt.title(seguroNames[i])
+
+
+regCorr = seguro.iloc[:,regNoBins].dropna().corr()
+mask = np.zeros_like(regCorr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+#   Removed bins
+#   I can do a pairwise ChiSq analysis on those later.
+sb.heatmap(round(regCorr,2),
+           mask = mask,
+           annot = True,
+           vmin = -1,
+           vmax = 1,
+           cmap = "RdBu")
+
+##  Correlation between 02 and 03. Let's take a look.
+sb.pairplot(seguro.iloc[:,regNoBins].dropna())
+
+"""
+
+            Car
+
+"""
+
+carNoBins = [i for i in car if '_bin' not in seguroNames[i]]
+
+for i in carNoBins:
+    plt.figure(i)
+    plt.hist(seguro.iloc[:,i].dropna())
+    plt.title(seguroNames[i])
+
+
+carCorr = seguro.iloc[:,carNoBins].dropna().corr()
+mask = np.zeros_like(carCorr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+#   Removed bins
+#   I can do a pairwise ChiSq analysis on those later.
+sb.heatmap(round(carCorr,2),
+           mask = mask,
+           annot = True,
+           vmin = -1,
+           vmax = 1,
+           cmap = "RdBu")
+
+##  A lot to look at here. Will return.
+
+"""
+
+            Calc
+
+"""
+
+calcNoBins = [i for i in calc if '_bin' not in seguroNames[i]]
+
+for i in calcNoBins:
+    plt.figure(i)
+    plt.hist(seguro.iloc[:,i].dropna())
+    plt.title(seguroNames[i])
+
+
+calcCorr = seguro.iloc[:,calcNoBins].dropna().corr()
+mask = np.zeros_like(calcCorr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+#   Removed bins
+#   I can do a pairwise ChiSq analysis on those later.
+sb.heatmap(round(calcCorr,2),
+           mask = mask,
+           annot = True,
+           vmin = -1,
+           vmax = 1,
+           cmap = "RdBu")
+
+##  That ain't right.
+calcCorr
+round(calcCorr,2)
+
+
+"""
+
+            Corr Plot Across all Sections
+
+"""
+
+allCorr = seguro.dropna().corr()
+mask = np.zeros_like(allCorr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+sb.heatmap(round(allCorr,2),
            mask = mask,
            vmin = -1,
            vmax = 1,
            cmap = "RdBu")
+
+##  Calc looks way too clean to be true.
+
