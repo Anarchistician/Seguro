@@ -68,3 +68,10 @@ for i in ind:
         plt.figure(i)
         plt.hist(seguro.iloc[:,i].dropna())
         plt.title(seguroNames[i])
+
+#   This has binaries in it that should be removed.
+#   I can do a pairwise ChiSq analysis on those later.
+sb.heatmap(seguro.iloc[:,ind].dropna().corr(),
+           vmin = -1,
+           vmax = 1,
+           cmap = "RdBu")
