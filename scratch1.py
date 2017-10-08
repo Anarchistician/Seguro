@@ -14,6 +14,9 @@ and excessively commented.
 
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
+import seaborn as sb
+import re
 
 seguro = pd.read_csv('Seguro/train.csv')
 seguro.shape # Dimensions
@@ -44,4 +47,19 @@ for i in range(nullTest.shape[1]):
           sum(nullTest.isnull().iloc[:,i]),
           round(sum(nullTest.isnull().iloc[:,i])/n,4)))
 
+"""
+Since the data dictionary is sparse,
+    I'm going to look at similarly named variables.
+"""
 
+seguroNames = list(seguro)
+seguroNames
+ind = [i for i,s in enumerate(seguroNames) if '_ind_' in s]
+reg = [i for i,s in enumerate(seguroNames) if '_reg_' in s]
+car = [i for i,s in enumerate(seguroNames) if '_car_' in s]
+calc = [i for i,s in enumerate(seguroNames) if '_calc_' in s]
+
+for i in ind:
+    if type(seguro.iloc[0,i]) == np.float64:
+        plt.figure(i)
+        plt.hist(seguro.iloc[:,i].dropna())
