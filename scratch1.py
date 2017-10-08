@@ -47,6 +47,8 @@ for i in range(nullTest.shape[1]):
           sum(nullTest.isnull().iloc[:,i]),
           round(sum(nullTest.isnull().iloc[:,i])/n,4)))
 
+##  I'm leaving this to deal with after plots and outliers
+
 """
 Since the data dictionary is sparse,
     I'm going to look at similarly named variables.
@@ -60,6 +62,9 @@ car = [i for i,s in enumerate(seguroNames) if '_car_' in s]
 calc = [i for i,s in enumerate(seguroNames) if '_calc_' in s]
 
 for i in ind:
-    if type(seguro.iloc[0,i]) == np.float64:
+    if "_bin" in seguroNames[i]:
+        pass
+    else:
         plt.figure(i)
         plt.hist(seguro.iloc[:,i].dropna())
+        plt.title(seguroNames[i])
