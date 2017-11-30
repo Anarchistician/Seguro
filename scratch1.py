@@ -17,6 +17,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sb
 import re
+import missingno as mn
 
 seguro = pd.read_csv('Seguro/train.csv')
 seguro.shape # Dimensions
@@ -34,18 +35,19 @@ n,m = seguro.shape
 
 seguro = seguro.replace(-1,np.nan)
 
+mn.matrix(seguro)
 
 ##  List number of missing values and percentage of total per column
 ##  Not particularly efficient, but as long as it runs...
 ##  I'll have to learn a better way to do this.
 
 nullTest = seguro.loc[:,seguro.isnull().any()]
+numNulls = [sum(nullTest.isnull().iloc[:,i]) for i in range(nullTest.shape[1])]
+propNulls = [ round(i/n,2) for i in numNulls]
 
 print( 'Column Name\t Nulls\t Proportion')
-for i in range(nullTest.shape[1]):
-    print('{}\t{}\t{}'.format(nullTest.columns[i],
-          sum(nullTest.isnull().iloc[:,i]),
-          round(sum(nullTest.isnull().iloc[:,i])/n,4)))
+for i in range(len(numNulls)):
+    print('{}\t{}\t{}\t'.format(nullTest.columns[i],numNulls[i],propNulls[i]))
 
 ##  I'm leaving this to deal with after plots and outliers
 
